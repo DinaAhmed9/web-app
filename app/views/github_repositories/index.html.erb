@@ -1,0 +1,33 @@
+<%= form_with url: "/github_repositories", method: :get do |form| %>
+  <%= form.label :query, "Search for:" %>
+  <%= form.text_field :query %>
+  <%= form.submit "Search" %>
+<% end %>
+
+<% if @error_message %>
+    <div>An error occurred please refresh after a while. Thank you for your patience</div>
+<% else %>
+    <% if @github_repositories.length == 0 %>
+        No Results Matching your filter
+    <% else %>
+        <table border="1">
+            <thead><tr><th>Full Name</th><th>Description</th></tr></thead>
+            <tbody>  
+            <% @github_repositories.each do |github_repo| %>
+                <tr>
+                        <td>
+                            <%= github_repo["full_name"] %>
+                        </td>
+                        <td>
+                            <%= github_repo["description"] %>
+                        </td>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+        <div>
+            <button><%= link_to 'Previous 20 Repos', github_repositories_path(page: @page - 1, query: @search_keyword) %></button>
+            <button><%= link_to "Next 20 Repos", github_repositories_path(page: @page + 1, query: @search_keyword) %></button>
+        </div>
+    <% end %>
+<% end %>
